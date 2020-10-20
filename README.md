@@ -6,7 +6,7 @@
 * Browsing threw folders;
 * Create folders;
 * Delete files;
-* Upload files;
+* Upload files(Only jpg, png, jpeg, gif);
 * Download files.
 
 ## Usage 
