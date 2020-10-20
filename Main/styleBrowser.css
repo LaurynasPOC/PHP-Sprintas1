@@ -1,0 +1,74 @@
+body {
+  width: 80%;
+  margin: auto;
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  text-decoration: none;
+}
+a:link { 
+  text-decoration: none; 
+} 
+a:hover { 
+  text-decoration: underline; 
+} 
+#files { 
+    border-collapse: collapse;
+    width: 100%;
+    font-size: medium;
+    
+  }
+  
+#files td, #files th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    font-weight: 300;
+  }
+  
+#files tr:nth-child(even){background-color: #f2f2f2;}
+  
+#files tr:hover {background-color: #ddd;}
+  
+#files th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #715b8b;
+    color: white;
+  }
+
+h2 {
+    font-weight: 700;
+    font-size: 18px;
+  }
+#back{
+  background-color: #f2f2f2;
+  border: 1.5px solid #ddd;
+  border-radius: 5px;
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+input[type='submit'] {
+  background-color:#f2f2f2;
+  border: 1.5px solid #ddd;
+  border-radius: 5px;
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+
+
+#delete {
+  background-color: #d8d1df;
+  border: 1.5px solid #b1a4c0;
+  border-radius: 5px;
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+
+#download {
+  background-color: #d8d1df;
+  border: 1.5px solid #b1a4c0;
+  border-radius: 5px;
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+.login {
+  width: 20%;
+  margin: auto;
+  margin-top: 50px;
+}
