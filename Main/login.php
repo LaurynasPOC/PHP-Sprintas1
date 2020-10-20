@@ -87,6 +87,7 @@ if (file_exists($target_file)) {
     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
       echo "The file ". htmlspecialchars( basename( $_FILES["fileToUpload"]["name"])). " has been uploaded.";
       header('refresh: 0');
+      
     } else {
       echo "Sorry, there was an error uploading your file.";
     }
@@ -132,9 +133,11 @@ print '<H2>Your content path is: '.$path;
 }
 print("</table>");
  print "</tbody></table>";   
+ echo "<a href=\"javascript:history.go(-1)\">GO BACK</a>";
+ 
 
 ?>
-<button id="back" onclick="goBack()">Go Back</button>
+
 <br>
 <form action="" method="POST">
         <input type="text" name="create" placeholder="Name of new directory">
@@ -151,9 +154,7 @@ print("</table>");
 <br>
 <a href="index.php">Log Out</a>
 <script>
-function goBack() {
-  window.history.back();
-}
+
 </script>
 </body>
 </html>
