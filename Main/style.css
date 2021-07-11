@@ -72,3 +72,22 @@ input[type='submit'] {
   margin: auto;
   margin-top: 50px;
 }
+
+button{
+  border-radius: 10px;
+  border: mediumaquamarine 2px solid;
+  color: #715b8b;;
+  background-color: #d8d1df;
+}
+
+button:hover{
+  border-radius: 10px;
+  border: mediumaquamarine 2px solid;
+  color: #ffffff;;
+  background-color: #cda3f8;
+}
+
+tr {
+  margin: 5px;
+}
+  

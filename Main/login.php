@@ -1,103 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" media="all" href="./styleBrowser.css">
-    <title>FileBrowser</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" media="all" href="style.css">
+  <title>FileBrowser</title>
 </head>
-<body> 
-    
-<?php
-    if (isset($_POST['delete'])) {
-        $fileDelete = './' . $_GET['path'] . $_POST['delete'];
-    
-        if (is_file($fileDelete)) {
-        unlink($fileDelete);
-        }
-    }
 
-    if (isset($_POST['create'])) {
-        if ($_POST['create'] != "") {
-         $dirCreate = './' . $_GET['path'] . $_POST['create'];
-            if (!is_dir($dirCreate))
-                mkdir($dirCreate, 0777, true);  
-        }
-    }
+<body>
 
-    if(isset($_POST['download'])){
-        $file='./' . $_GET["path"] . $_POST['download'];
-        $fileToDownloadEscaped = str_replace("&nbsp;", " ", htmlentities($file, null, 'utf-8'));
-        ob_clean();
-        ob_start();
-        header('Content-Description: File Transfer');
-        header('Content-Type: application/pdf'); 
-        header('Content-Disposition: attachment; filename=' . basename($fileToDownloadEscaped));
-        header('Content-Transfer-Encoding: binary');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-        header('Pragma: public');
-        header('Content-Length: ' . filesize($fileToDownloadEscaped)); 
-        ob_end_flush();
-        readfile($fileToDownloadEscaped);
-        exit;
-    }
+  <?php
+  require_once 'functions.php';
 
 
+  $path = "./" . $_GET['path'];
+  $url = $_GET['path'];
+  $files = array_diff(scandir($path), array("..", "."));
+  $target_dir = $path;
+  $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+  $uploadOk = 1;
+  $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-    $path = "./".$_GET['path'];
-    $files = array_diff(scandir($path), array("..", "."));
-
-    $target_dir = $path;
-    $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-    $uploadOk = 1;
-    $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-
-// Check if image file is a actual image or fake image
-if(isset($_POST["submit"])) {
-  $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-  if($check !== false) {
-    echo "File is an image - " . $check["mime"] . ".";
-    $uploadOk = 1;
-  } else {
-    echo "File is not an image.";
-    $uploadOk = 0;
-  }
-  // Check if file already exists
-if (file_exists($target_file)) {
-    echo "Sorry, file already exists.";
-    $uploadOk = 0;
-  }
-  // Check file size
-  if ($_FILES["fileToUpload"]["size"] > 500000) {
-    echo "Sorry, your file is too large.";
-    $uploadOk = 0;
-  }
-  // Allow certain file formats
-  if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-  && $imageFileType != "gif" ) {
-    echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-    $uploadOk = 0;
-  }
-  // Check if $uploadOk is set to 0 by an error
-  if ($uploadOk == 0) {
-    echo "Sorry, your file was not uploaded.";
-  // if everything is ok, try to upload file
-  } else {
-    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-      echo "The file ". htmlspecialchars( basename( $_FILES["fileToUpload"]["name"])). " has been uploaded.";
-      header('refresh: 0');
-      
-    } else {
-      echo "Sorry, there was an error uploading your file.";
-    }
-  }
-}
-
-
-print '<H2>Your content path is: '.$path;
-
- print ("<table id='files'>
+  print('<table>');
+  print '<tr><H2>Your content path is: ' . $url . '</tr>';
+  print "<tr><br><button><a href='login.php' style='text-decoration:none;'>Back to the homepage</a><br></button></tr>";
+  print('</table>');
+  print("<table id='files'>
  <thead>
  <tr>
  <th>Type</th>
@@ -105,56 +34,79 @@ print '<H2>Your content path is: '.$path;
  <th>Action</th>
  </tr>
  </thead>");
- print "<tbody>";
- 
+  print "<tbody>";
 
- foreach ($files as $fnd) {
-        print('<tr>');
-        print('<td>' . (is_dir($path . $fnd) ? "Directory" : "File") . '</td>');
-        print('<td>' . (is_dir($path . $fnd)
-            ? '<a href="' . (isset($_GET['path'])
-                ? $_SERVER['REQUEST_URI'] . $fnd . '/'
-                : $_SERVER['REQUEST_URI'] . '?path=' . $fnd . '/') . '">' . $fnd . '</a>'
-            : $fnd)
-            . '</td>');
-        print('<td>'
-            . (is_dir($path . $fnd)
-                ? ''
-                : '<form style="display: inline-block" action="" method="post">
-                <input type="hidden" name="download" value=' . $fnd. '>
+
+  foreach ($files as $fnd) {
+    print('<tr>');
+    print('<td>' . (is_dir($path . $fnd) ? "Directory" : "File") . '</td>');
+    print('<td>' . (is_dir($path . $fnd) ? '<a href="' . (isset($_GET['path']) ? $_SERVER['REQUEST_URI'] . $fnd . '/' : $_SERVER['REQUEST_URI'] . '?path=' . $fnd . '/') . '">' . $fnd . '</a>' : $fnd)
+      . '</td>');
+    print('<td>'
+      . (is_dir($path . $fnd)
+        ? ''
+        : '<form style="display: inline-block" action="" method="post">
+                <input type="hidden" name="download" value=' . $fnd . '>
                 <button id="download" type="submit">Download</button>
-               </form>
-                <form style="display: inline-block" action="" method="post">
+          </form>
+          <form style="display: inline-block" action="" method="post">
                 <input  type="hidden" name="delete" value=' . $fnd . '>
                 <button id="delete" type="submit">Delete</button>
-                </form>')
-            . "</form></td>");
-        print('</tr>');
-}
-print("</table>");
- print "</tbody></table>";   
- echo "<a href=\"javascript:history.go(-1)\">GO BACK</a>";
- 
+          </form>')
+      . "</td>");
+    print('</tr>');
+  }
 
-?>
+  print "</tbody></table><br>";
 
-<br>
-<form action="" method="POST">
-        <input type="text" name="create" placeholder="Name of new directory">
-        <input type="submit" value='sukurti'>
-</form>
-<br>
-<form id='upload' action="" method="post" enctype="multipart/form-data">
-  Select image to upload:
+  ?>
+
   <br>
-  <input type="file" name="fileToUpload" id="fileToUpload">
+  <form action="" method="POST">
+    <input type="text" name="create" placeholder="Name of new directory">
+    <input type="submit" value='Create'>
+  </form>
   <br>
-  <input type="submit" value="Upload Image" name="submit">
-</form>
-<br>
-<a href="index.php">Log Out</a>
-<script>
+  <form id='upload' action="" method="POST" enctype="multipart/form-data">
+    Select image to upload:
+    <br>
+    <input type="file" name="fileToUpload" id="fileToUpload">
+    <br>
+    <input type="submit" value="Upload Image" name="submit">
+  </form>
+  <br>
 
-</script>
+  <?php
+  delete();
+  create();
+  download();
+  upload($imageFileType, $target_file, $uploadOk);
+  logOut();
+
+
+  $arr = explode('/', $url);
+  array_pop($arr);
+  array_pop($arr);
+  $newUrl = implode('/', $arr);
+
+  // print '<br>' . $url;
+  // print '<br>';
+
+  // print '<br>';
+  // print_r($arr);
+  // print '<br> suskaldytas';
+
+  // print_r($wlast);
+  // print '<br>';
+
+  // print 'naujasurl yra ' . $newUrl;
+
+
+  ?>
+
+  <a name='back' href="<?php print 'login.php?path=' . $newUrl . '/' ?>">Back</a>
+
+
 </body>
+
 </html>
