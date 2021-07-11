@@ -118,15 +118,4 @@ function login()
             $msg = 'Wrong username or password';
         }
     }
-
-    print '</div>
-    <div class="login">
-       <form id="login" action="" method="post">
-          <input type="text" name="username" placeholder="username = Laurynas" required autofocus></br>
-          <input type="password" name="password" placeholder="password = 1234" required>
-          <br>
-          <button type="submit" name="login">Login</button>
-       </form>
-    </div>';
-    echo $msg;
 }
